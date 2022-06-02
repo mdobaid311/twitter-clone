@@ -51,8 +51,8 @@ const Input = () => {
         });
       });
     }
-    setInput("");
     setLoading(false);
+    setInput("");
     setSelectedFile(null);
     setShowEmojis(false);
   };
@@ -89,7 +89,7 @@ const Input = () => {
       <div className="w-full divide-y divide-gray-700">
         <div className={`${selectedFile && "pb-7"} ${input && "space-y-2.5"}`}>
           <textarea
-            name={input}
+            value={input}
             rows="2"
             className="bg-transparent outline-none text-[#d9d9d9] placeholder-gray-500 tracking-wide w-full min-h-[50px]"
             placeholder="What's happening?"

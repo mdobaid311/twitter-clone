@@ -5,12 +5,19 @@ import Sidebar from "../components/Sidebar";
 import styles from "../styles/Home.module.css";
 import { getProviders, getSession, useSession } from "next-auth/react";
 import Login from "../components/Login";
+import { useRecoilState } from "recoil";
+import { modalState, postIdState } from "../atoms/modalAtom";
 
 export default function Home({ trendingResults, followResults, providers }) {
   const { data: session } = useSession();
   console.log(providers);
 
   if (!session) return <Login providers={providers} />;
+
+  const [isOpen, setIsOpen] = useRecoilState(modalState);
+  const [postId, setPostId] = useRecoilState(postIdState);
+
+  console.log(modalState);
 
   return (
     <div className="">
@@ -21,7 +28,13 @@ export default function Home({ trendingResults, followResults, providers }) {
       </Head>
       <main className="bg-black min-h-screen flex max-w-[1500px] mx-auto ">
         <Sidebar />
-        <Feed />{session.user.email}
+        <Feed
+          isOpen={isOpen}
+          setIsOpen={setIsOpen}
+          postId={postId}
+          setPostId={setPostId}
+        />
+        {session.user.email}
       </main>
     </div>
   );
