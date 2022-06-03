@@ -7,9 +7,11 @@ import { collection, onSnapshot, orderBy, query } from "firebase/firestore";
 import Post from "./Post";
 import { useRecoilState } from "recoil";
 import { modalState } from "../atoms/modalAtom";
+import { signOut, useSession } from "next-auth/react";
 
-const Feed = ({isOpen,setIsOpen,postId,setPostId}) => {
+const Feed = ({ isOpen, setIsOpen, postId, setPostId }) => {
   const [posts, setPosts] = useState([]);
+  const { data: session } = useSession();
 
   // MESSY
   // useEffect(() => {
@@ -44,12 +46,28 @@ const Feed = ({isOpen,setIsOpen,postId,setPostId}) => {
         <div className="hoverAnimation w-9 h-9 flex items-center justify-center xl:px-0">
           <SparklesIcon className="h-5 text-white" />
         </div>
+        <div className="flex flex-1 justify-end">
+          <img
+            src={session.user.image}
+            alt=""
+            className=" sm:hidden h-10 w-10 rounded-full xl:mr-2.5 " onClick={signOut}
+          />
+        </div>
       </div>
       <Input />
       <div className="pb-72">
         {posts.map((post) => {
-          return <Post key={post.id} id={post.id} post={post.data()}  isOpen={isOpen} setIsOpen={setIsOpen}   postId={postId}
-          setPostId={setPostId}/>;
+          return (
+            <Post
+              key={post.id}
+              id={post.id}
+              post={post.data()}
+              isOpen={isOpen}
+              setIsOpen={setIsOpen}
+              postId={postId}
+              setPostId={setPostId}
+            />
+          );
         })}
       </div>
     </div>
