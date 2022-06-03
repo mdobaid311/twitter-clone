@@ -11,7 +11,10 @@ export default NextAuth({
     // ...add more providers here
   ],
   callbacks: {
-    async session({ session, token }) {
+    async session({
+      session,
+      token
+    }) {
       session.user.tag = session.user.name
         .split(" ")
         .join("")
@@ -21,4 +24,5 @@ export default NextAuth({
       return session;
     },
   },
+  secret: process.env.JWT_SECRET
 });
