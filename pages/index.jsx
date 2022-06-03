@@ -7,10 +7,10 @@ import { getProviders, getSession, useSession } from "next-auth/react";
 import Login from "../components/Login";
 import { useRecoilState } from "recoil";
 import { modalState, postIdState } from "../atoms/modalAtom";
+import Modal from "../components/Modal";
 
 export default function Home({ trendingResults, followResults, providers }) {
   const { data: session } = useSession();
-  console.log(providers);
 
   if (!session) return <Login providers={providers} />;
 
@@ -34,7 +34,14 @@ export default function Home({ trendingResults, followResults, providers }) {
           postId={postId}
           setPostId={setPostId}
         />
-        {session.user.email}
+        {isOpen && (
+          <Modal
+            isOpen={isOpen}
+            setIsOpen={setIsOpen}
+            postId={postId}
+            setPostId={setPostId}
+          />
+        )}
       </main>
     </div>
   );

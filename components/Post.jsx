@@ -23,22 +23,61 @@ import {
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
+import Moment from "react-moment";
 import { selector } from "recoil";
 import { textState } from "../atoms/modalAtom";
 // import Moment from "react-moment";
 import { db } from "../firebase";
 
-const Post = ({ id, post, postPage, isOpen, setIsOpen,postId,setPostId }) => {
+const Post = ({ id, post, postPage, isOpen, setIsOpen, postId, setPostId }) => {
   const { data: session } = useSession();
   const [comments, setComments] = useState([]);
   const [likes, setLikes] = useState([]);
   const [liked, setLiked] = useState(false);
   const router = useRouter();
 
-  console.log(isOpen);
+  useEffect(
+    () =>
+      onSnapshot(
+        query(
+          collection(db, "posts", id, "comments"),
+          orderBy("timestamp", "desc")
+        ),
+        (snapshot) => setComments(snapshot.docs)
+      ),
+    [db, id]
+  );
+  useEffect(
+    () =>
+      onSnapshot(collection(db, "posts", id, "likes"), (snapshot) =>
+        setLikes(snapshot.docs)
+      ),
+    [db, id]
+  );
+
+  useEffect(
+    () =>
+      setLiked(
+        likes.findIndex((like) => like.id === session?.user?.uid) !== -1
+      ),
+    [likes]
+  );
+
+  const likePost = async () => {
+    if (liked) {
+      await deleteDoc(doc(db, "posts", id, "likes", session.user.uid));
+    } else {
+      await setDoc(doc(db, "posts", id, "likes", session.user.uid), {
+        username: session.user.name,
+      });
+    }
+  };
 
   return (
-    <div className="p-3 cursor-pointer border-b border-gray-700 flex" onClick={()=>router.push(`/${id}`)}>
+    <div
+      className="p-3 cursor-pointer border-b border-gray-700 flex"
+      onClick={() => router.push(`/${id}`)}
+    >
       {!postPage && (
         <img src={post?.userImg} className="h-11 w-11 rounded-full mr-4 " />
       )}
@@ -68,11 +107,11 @@ const Post = ({ id, post, postPage, isOpen, setIsOpen,postId,setPostId }) => {
             </div>{" "}
             ·{" "}
             <span className="hover:underline text-sm sm:text-[15px]">
-              {/* <Moment/> */}
+              <Moment fromNow>{post?.timestamp?.toDate()}</Moment>
             </span>
             {!postPage && (
               <p className="text-[#d9d9d9] text-[15px] sm:text-base mt-0.5 ">
-                {post.text}
+                {post?.text}
               </p>
             )}
           </div>
@@ -82,7 +121,7 @@ const Post = ({ id, post, postPage, isOpen, setIsOpen,postId,setPostId }) => {
         </div>
         {postPage && (
           <p className="text-[#d9d9d9] text-[15px] sm:text-base mt-0.5 ">
-            {post.text}
+            {post?.text}
           </p>
         )}
         <img

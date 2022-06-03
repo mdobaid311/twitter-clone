@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "@emoji-mart/data": "^1.0.1",
+    "@headlessui/react": "^1.6.4",
     "@heroicons/react": "^1.0.6",
     "babel-runtime": "^6.26.0",
     "emoji-mart": "^5.0.0",
