@@ -9,7 +9,7 @@ import { getProviders, getSession, useSession } from "next-auth/react";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { useRecoilState } from "recoil";
-import { modalState } from "../atoms/modalAtom";
+import { modalState, postIdState } from "../atoms/modalAtom";
 import Modal from "../components/Modal";
 import Sidebar from "../components/Sidebar";
 import Widgets from "../components/Widgets";
@@ -22,6 +22,7 @@ import Head from "next/head";
 const PostPage = ({ trendingResults, followResults, providers }) => {
   const { data: session } = useSession();
   const [isOpen, setIsOpen] = useRecoilState(modalState);
+  const [postId, setPostId] = useRecoilState(postIdState);
   const [post, setPost] = useState();
   const [comments, setComments] = useState([]);
   const router = useRouter();
@@ -69,7 +70,15 @@ const PostPage = ({ trendingResults, followResults, providers }) => {
             Tweet
           </div>
 
-          <Post id={id} post={post} postPage />
+          <Post
+            id={id}
+            post={post}
+            postPage
+            isOpen={isOpen}
+            setIsOpen={setIsOpen}
+            postId={postId}
+            setPostId={setPostId}
+          />
           {comments.length > 0 && (
             <div className="pb-72">
               {comments.map((comment) => (

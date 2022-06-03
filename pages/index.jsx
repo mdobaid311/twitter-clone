@@ -8,6 +8,7 @@ import Login from "../components/Login";
 import { useRecoilState } from "recoil";
 import { modalState, postIdState } from "../atoms/modalAtom";
 import Modal from "../components/Modal";
+import Widgets from "../components/Widgets";
 
 export default function Home({ trendingResults, followResults, providers }) {
   const { data: session } = useSession();
@@ -33,6 +34,10 @@ export default function Home({ trendingResults, followResults, providers }) {
           setIsOpen={setIsOpen}
           postId={postId}
           setPostId={setPostId}
+        />
+        <Widgets
+          trendingResults={trendingResults}
+          followResults={followResults}
         />
         {isOpen && (
           <Modal
