@@ -12,11 +12,10 @@ import Widgets from "../components/Widgets";
 
 export default function Home({ trendingResults, followResults, providers }) {
   const { data: session } = useSession();
-
-  if (!session) return <Login providers={providers} />;
-
   const [isOpen, setIsOpen] = useRecoilState(modalState);
   const [postId, setPostId] = useRecoilState(postIdState);
+
+  if (!session) return <Login providers={providers} />;
 
   console.log(modalState);
 

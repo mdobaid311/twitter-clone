@@ -22,12 +22,13 @@ import Login from "../components/Login";
 
 const PostPage = ({ trendingResults, followResults, providers }) => {
   const { data: session } = useSession();
-  const [isOpen, setIsOpen] = useRecoilState(modalState);
-  const [postId, setPostId] = useRecoilState(postIdState);
   const [post, setPost] = useState();
   const [comments, setComments] = useState([]);
   const router = useRouter();
   const { id } = router.query;
+
+  const [isOpen, setIsOpen] = useRecoilState(modalState);
+  const [postId, setPostId] = useRecoilState(postIdState);
 
   useEffect(
     () =>
