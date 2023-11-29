@@ -114,7 +114,6 @@ const PostPage = ({ trendingResults, followResults, providers }) => {
 export default PostPage;
 
 export async function getServerSideProps(context) {
- 
   const providers = await getProviders();
   const session = await getSession(context);
   console.log(providers);
